@@ -157,5 +157,17 @@ async def main():
 # Run both Flask and Telegram bot concurrently
 if __name__ == "__main__":
     loop = asyncio.get_event_loop()
-    loop.create_task(main())  # Start the Telegram bot
-    app.run(debug=True, use_reloader=False, threaded=True)  # Run Flask
+
+    # Start the Telegram bot asynchronously
+    loop.create_task(main())
+
+    # Run Flask using an asynchronous loop
+    from threading import Thread
+    def run_flask():
+        app.run(debug=True, use_reloader=False, threaded=True)
+
+    flask_thread = Thread(target=run_flask)
+    flask_thread.start()
+
+    # Keep the asyncio loop running
+    loop.run_forever()

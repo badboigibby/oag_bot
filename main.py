@@ -4,8 +4,13 @@ from bot import start, show_products
 import datetime
 import pytz
 
-# Load token from environment variable
-token = os.getenv("7745593859:AAGBbhDdDK_nKIDz7ZD_kdXwNzLxauhA4YQ")
+import os
+
+# Your token from environment variable
+token = os.getenv("TELEGRAM_BOT_TOKEN")
+
+# Your bot setup and other code here
+
 
 # Chat IDs to send tips to
 CHAT_IDS = [123456789, 987654321, 1122334455]  # Replace with your actual chat IDs

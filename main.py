@@ -1,3 +1,8 @@
+from flask import Flask
+import os
+
+app = Flask(__name__)
+
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.ext import Application, CommandHandler, MessageHandler, filters, ContextTypes
 from bot import start, show_products

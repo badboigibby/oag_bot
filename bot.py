@@ -3,6 +3,7 @@ from telegram.ext import Application, CommandHandler, MessageHandler, filters, C
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 import datetime
 import os
+from flask import Flask
 
 # Your bot token
 BOT_TOKEN = "7745593859:AAGBbhDdDK_nKIDz7ZD_kdXwNzLxauhA4YQ"
@@ -130,6 +131,13 @@ async def subscribe(update: Update, context: ContextTypes.DEFAULT_TYPE):
     )
     await update.message.reply_text("You have subscribed to daily bet tips! 🎉")
 
+# Flask app to keep the bot alive
+app = Flask(__name__)
+
+@app.route('/')
+def home():
+    return "Bot is running!"
+
 # Main function to run the bot
 def main():
     application = Application.builder().token(BOT_TOKEN).build()
@@ -145,5 +153,8 @@ def main():
     # Run the bot
     application.run_polling()
 
+# Running the Flask app
 if __name__ == "__main__":
-    main()
+    from threading import Thread
+    Thread(target=main).start()  # Run the Telegram bot in a separate thread
+    app.run(debug=True, use_reloader=False)  # Run Flask app

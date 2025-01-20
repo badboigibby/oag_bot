@@ -1,6 +1,11 @@
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.ext import Application, CommandHandler, MessageHandler, filters, ContextTypes
 from bot import start, show_products
+import datetime
+import pytz
+
+# Chat IDs to send tips to
+CHAT_IDS = [123456789, 987654321, 1122334455]  # Replace with your actual chat IDs
 
 # Frequently Asked Questions (FAQs)
 FAQS = [
@@ -30,17 +35,33 @@ async def show_faqs(update: Update, context: ContextTypes.DEFAULT_TYPE):
         faqs_message += f"❓ *{faq['question']}*\n"
         faqs_message += f"💬 *Answer:* {faq['answer']}\n\n"
     
-    await update.message.reply_text(faqs_message, parse_mode="Markdown")
+    await update.message.reply_text(faqs_message, parse_mode="MarkdownV2")
+
+# Function to send daily tips
+async def send_tips(context: ContextTypes.DEFAULT_TYPE):
+    message = "Here are your daily tips for betting. Good luck!"
+    for chat_id in CHAT_IDS:
+        try:
+            await context.bot.send_message(chat_id=chat_id, text=message)
+        except Exception as e:
+            print(f"Error sending message to chat ID {chat_id}: {e}")
 
 # Main function to run the bot
 def main():
+    # Bot token (replace with your actual bot token)
+    token = "7745593859:AAGBbhDdDK_nKIDz7ZD_kdXwNzLxauhA4YQ"
+
     # Create the application (this is the entry point of your bot)
-    application = Application.builder().token("7745593859:AAGBbhDdDK_nKIDz7ZD_kdXwNzLxauhA4YQ").build()
+    application = Application.builder().token(token).build()
 
     # Add command handlers
     application.add_handler(CommandHandler("start", start))
     application.add_handler(CommandHandler("products", show_products))
     application.add_handler(CommandHandler("faq", show_faqs))  # Add the FAQ command
+
+    # Schedule daily tips at 1:00 AM MST
+    mst = pytz.timezone("America/Edmonton")  # Mountain Standard Time
+    application.job_queue.run_daily(send_tips, time=datetime.time(1, 0, tzinfo=mst))
 
     # Start the bot
     application.run_polling()

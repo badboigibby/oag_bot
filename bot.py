@@ -158,7 +158,3 @@ if __name__ == "__main__":
     from threading import Thread
     Thread(target=main).start()  # Run the Telegram bot in a separate thread
     app.run(debug=True, use_reloader=False)  # Run Flask app
-    
-from flask import Flask
-app = Flask(__name__)
-

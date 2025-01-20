@@ -4,6 +4,9 @@ from bot import start, show_products
 import datetime
 import pytz
 
+# Load token from environment variable
+token = os.getenv("7745593859:AAGBbhDdDK_nKIDz7ZD_kdXwNzLxauhA4YQ")
+
 # Chat IDs to send tips to
 CHAT_IDS = [123456789, 987654321, 1122334455]  # Replace with your actual chat IDs
 

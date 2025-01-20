@@ -1,10 +1,9 @@
+import asyncio
+from flask import Flask
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.ext import Application, CommandHandler, MessageHandler, filters, ContextTypes
-from apscheduler.schedulers.asyncio import AsyncIOScheduler
 import datetime
 import os
-from flask import Flask
-from threading import Thread
 
 # Your bot token
 BOT_TOKEN = "7745593859:AAGBbhDdDK_nKIDz7ZD_kdXwNzLxauhA4YQ"
@@ -139,8 +138,9 @@ app = Flask(__name__)
 def home():
     return "Bot is running!"
 
-# Main function to run the bot
-def main():
+# Main function to run the bot and Flask app
+async def main():
+    # Set up your bot
     application = Application.builder().token(BOT_TOKEN).build()
 
     # Command handlers
@@ -151,10 +151,11 @@ def main():
     # Message handler for general questions
     application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
 
-    # Run the bot
-    application.run_polling()
+    # Run the bot with polling
+    await application.run_polling()
 
-# Running the Flask app
+# Run both Flask and Telegram bot concurrently
 if __name__ == "__main__":
-    Thread(target=main).start()  # Run the Telegram bot in a separate thread
-    app.run(debug=True, use_reloader=False)  # Run Flask app
+    loop = asyncio.get_event_loop()
+    loop.create_task(main())  # Start the Telegram bot
+    app.run(debug=True, use_reloader=False, threaded=True)  # Run Flask

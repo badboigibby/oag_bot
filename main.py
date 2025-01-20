@@ -12,7 +12,7 @@ import pytz
 import os
 
 # Your token from environment variable
-token = os.getenv("TELEGRAM_BOT_TOKEN")
+token = os.getenv("7745593859:AAGBbhDdDK_nKIDz7ZD_kdXwNzLxauhA4YQ")
 
 # Your bot setup and other code here
 

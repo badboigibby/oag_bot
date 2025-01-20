@@ -70,7 +70,7 @@ def main():
     # Add command handlers
     application.add_handler(CommandHandler("start", start))
     application.add_handler(CommandHandler("products", show_products))
-    application.add_handler(CommandHandler("faq", show_faqs))  # Add the FAQ command
+    application.add_handler(CommandHandler("faq", show_faqs))  # Add the FAQ command)
 
     # Schedule daily tips at 1:00 AM MST
     mst = pytz.timezone("America/Edmonton")  # Mountain Standard Time

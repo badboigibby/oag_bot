@@ -1,9 +1,10 @@
 import asyncio
+import os
+from threading import Thread
 from flask import Flask
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.ext import Application, CommandHandler, MessageHandler, filters, ContextTypes
 import datetime
-import os
 
 # Your bot token
 BOT_TOKEN = "7745593859:AAGBbhDdDK_nKIDz7ZD_kdXwNzLxauhA4YQ"
@@ -55,6 +56,14 @@ BET_TIPS = [
     "Today's tip: Bet on over 2.5 goals in the next match.",
     "Today's tip: Player X to score anytime."
 ]
+
+# Initialize the Flask app
+app = Flask(__name__)
+
+# Define the route for the home page (Flask)
+@app.route('/')
+def home():
+    return "Bot is running!"  # This message appears when the root URL is accessed
 
 # Function to save user chat IDs
 def save_chat_id(chat_id):
@@ -131,14 +140,11 @@ async def subscribe(update: Update, context: ContextTypes.DEFAULT_TYPE):
     )
     await update.message.reply_text("You have subscribed to daily bet tips! 🎉")
 
-# Flask app to keep the bot alive
-app = Flask(__name__)
+# Flask thread runner
+def run_flask():
+    app.run(debug=True, use_reloader=False, threaded=True)
 
-@app.route('/')
-def home():
-    return "Bot is running!"
-
-# Main function to run the bot and Flask app
+# Main entry point for the application
 async def main():
     # Set up your bot
     application = Application.builder().token(BOT_TOKEN).build()
@@ -154,20 +160,16 @@ async def main():
     # Run the bot with polling
     await application.run_polling()
 
-# Run both Flask and Telegram bot concurrently
+# Main entry point for the application
 if __name__ == "__main__":
     loop = asyncio.get_event_loop()
 
-    # Start the Telegram bot asynchronously
-    loop.create_task(main())
-
-    # Run Flask using an asynchronous loop
-    from threading import Thread
-    def run_flask():
-        app.run(debug=True, use_reloader=False, threaded=True)
-
+    # Start Flask in a separate thread
     flask_thread = Thread(target=run_flask)
     flask_thread.start()
+
+    # Run the Telegram bot in the asyncio event loop
+    loop.create_task(main())
 
     # Keep the asyncio loop running
     loop.run_forever()

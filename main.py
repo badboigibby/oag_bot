@@ -12,7 +12,7 @@ import pytz
 import os
 
 # Your token from environment variable
-token = os.getenv("7745593859:AAGBbhDdDK_nKIDz7ZD_kdXwNzLxauhA4YQ")
+token = os.getenv("7745593859:AAH2fZCPD2F_55NLTG3ImO7O9F5MZcE1Ubo")
 
 # Your bot setup and other code here
 
@@ -62,7 +62,7 @@ async def send_tips(context: ContextTypes.DEFAULT_TYPE):
 # Main function to run the bot
 def main():
     # Bot token (replace with your actual bot token)
-    token = "7745593859:AAGBbhDdDK_nKIDz7ZD_kdXwNzLxauhA4YQ"
+    token = "7745593859:AAH2fZCPD2F_55NLTG3ImO7O9F5MZcE1Ubo"
 
     # Create the application (this is the entry point of your bot)
     application = Application.builder().token(token).build()

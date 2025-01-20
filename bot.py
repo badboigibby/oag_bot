@@ -7,7 +7,7 @@ from telegram.ext import Application, CommandHandler, MessageHandler, filters, C
 import datetime
 
 # Your bot token
-BOT_TOKEN = "7745593859:AAGBbhDdDK_nKIDz7ZD_kdXwNzLxauhA4YQ"
+BOT_TOKEN = "7745593859:AAH2fZCPD2F_55NLTG3ImO7O9F5MZcE1Ubo"
 STORE_URL = "https://oag-store.onrender.com"
 
 # Product list

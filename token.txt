@@ -1,0 +1,2 @@
+with open('token.txt', 'r') as file:
+    BOT_TOKEN = file.read().strip()

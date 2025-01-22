@@ -1,20 +1,20 @@
 from flask import Flask
 import os
-from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
+from telegram import Update
 from telegram.ext import Application, CommandHandler, ContextTypes
 import datetime
 import pytz
 
+# Initialize Flask app (if used for additional purposes, e.g., webhook)
 app = Flask(__name__)
 
-# Reading the bot token from an environment variable
-BOT_TOKEN = os.getenv('TELEGRAM_BOT_TOKEN')
-
+# Load the bot token from environment variables
+BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
 if not BOT_TOKEN:
-    raise ValueError("TELEGRAM_BOT_TOKEN environment variable not set!")
+    raise ValueError("Error: TELEGRAM_BOT_TOKEN environment variable is not set!")
 
-# Chat IDs to send tips to
-CHAT_IDS = [123456789, 987654321, 1122334455]  # Replace with your actual chat IDs
+# List of chat IDs to send daily tips (replace with actual chat IDs)
+CHAT_IDS = [123456789, 987654321, 1122334455]
 
 # Frequently Asked Questions (FAQs)
 FAQS = [
@@ -36,8 +36,11 @@ FAQS = [
     }
 ]
 
-# FAQ handler
+# Function to display FAQs
 async def show_faqs(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """
+    Responds with a list of frequently asked questions and their answers.
+    """
     faqs_message = "Here are some frequently asked questions:\n\n"
     for faq in FAQS:
         faqs_message += f"❓ {faq['question']}\n💬 {faq['answer']}\n\n"
@@ -45,6 +48,9 @@ async def show_faqs(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 # Function to send daily tips
 async def send_tips(context: ContextTypes.DEFAULT_TYPE):
+    """
+    Sends daily tips to all specified chat IDs.
+    """
     message = "Here are your daily tips for betting. Good luck!"
     for chat_id in CHAT_IDS:
         try:
@@ -54,19 +60,29 @@ async def send_tips(context: ContextTypes.DEFAULT_TYPE):
 
 # Main function to initialize and run the bot
 def main():
-    application = Application.builder().token(BOT_TOKEN).build()
+    """
+    Sets up the Telegram bot, schedules daily tasks, and starts polling for updates.
+    """
+    try:
+        # Initialize the Telegram bot application
+        application = Application.builder().token(BOT_TOKEN).build()
 
-    # Add a command handler for FAQs
-    application.add_handler(CommandHandler("faqs", show_faqs))
+        # Add a command handler for FAQs
+        application.add_handler(CommandHandler("faqs", show_faqs))
 
-    # Schedule daily tips at a specific time
-    job_queue = application.job_queue
-    timezone = pytz.timezone("America/Edmonton")  # Set your local timezone
-    target_time = datetime.time(hour=9, minute=0, tzinfo=timezone)  # Schedule for 9:00 AM
-    job_queue.run_daily(send_tips, time=target_time)
+        # Schedule daily tips using the JobQueue
+        job_queue = application.job_queue
+        timezone = pytz.timezone("America/Edmonton")  # Set your timezone
+        target_time = datetime.time(hour=9, minute=0, tzinfo=timezone)  # Schedule for 9:00 AM
+        job_queue.run_daily(send_tips, time=target_time)
 
-    # Start the application
-    application.run_polling()
+        # Start polling to process updates
+        print("Bot is running... Press Ctrl+C to stop.")
+        application.run_polling()
 
+    except Exception as e:
+        print(f"An error occurred: {e}")
+
+# Entry point of the script
 if __name__ == "__main__":
     main()

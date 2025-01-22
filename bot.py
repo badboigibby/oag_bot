@@ -6,8 +6,8 @@ from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.ext import Application, CommandHandler, MessageHandler, filters, ContextTypes
 import datetime
 
-# Fetch the bot token from Render's environment variables
-BOT_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN")
+# Fetch the bot token from environment variables
+TELEGRAM_BOT_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN")
 STORE_URL = "https://oag-store.onrender.com"
 
 # Product list
@@ -147,7 +147,7 @@ def run_flask():
 # Main entry point for the application
 async def main():
     # Set up your bot
-    application = Application.builder().token(BOT_TOKEN).build()
+    application = Application.builder().token(TELEGRAM_BOT_TOKEN).build()
 
     # Command handlers
     application.add_handler(CommandHandler("start", start))
@@ -173,3 +173,4 @@ if __name__ == "__main__":
 
     # Keep the asyncio loop running
     loop.run_forever()
+

@@ -1,6 +1,10 @@
+from dotenv import load_dotenv
 from telegram import Update
 from telegram.ext import Application, MessageHandler, filters, ContextTypes
 import os
+
+# Load environment variables
+load_dotenv()
 
 # FAQ answers dictionary
 FAQ_ANSWERS = {
@@ -28,7 +32,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(faq_response)
 
 # Main function to set up and run the bot
-def main():
+async def main():
     # Fetch the bot token from environment variables
     BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
 
@@ -42,8 +46,10 @@ def main():
     application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
 
     # Start the bot
-    application.run_polling()
+    await application.run_polling()
 
 # Run the bot
 if __name__ == "__main__":
-    main()
+    import asyncio
+    asyncio.run(main())
+

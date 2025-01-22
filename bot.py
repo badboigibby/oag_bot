@@ -6,8 +6,8 @@ from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.ext import Application, CommandHandler, MessageHandler, filters, ContextTypes
 import datetime
 
-# Your bot token
-BOT_TOKEN = "7745593859:AAH2fZCPD2F_55NLTG3ImO7O9F5MZcE1Ubo"
+# Fetch the bot token from Render's environment variables
+BOT_TOKEN = os.environ.get("BOT_TOKEN")
 STORE_URL = "https://oag-store.onrender.com"
 
 # Product list

@@ -1,2 +1,2 @@
-with open('token.txt', 'r') as file:
+with open('/absolute/path/to/token.txt', 'r') as file:
     BOT_TOKEN = file.read().strip()

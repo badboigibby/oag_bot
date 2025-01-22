@@ -10,6 +10,9 @@ app = Flask(__name__)
 # Reading the bot token from an environment variable
 BOT_TOKEN = os.getenv('TELEGRAM_BOT_TOKEN')
 
+if not BOT_TOKEN:
+    raise ValueError("TELEGRAM_BOT_TOKEN environment variable not set!")
+
 # Chat IDs to send tips to
 CHAT_IDS = [123456789, 987654321, 1122334455]  # Replace with your actual chat IDs
 
@@ -49,6 +52,21 @@ async def send_tips(context: ContextTypes.DEFAULT_TYPE):
         except Exception as e:
             print(f"Error sending message to chat ID {chat_id}: {e}")
 
-# Main function to run the bot
+# Main function to initialize and run the bot
 def main():
-    if not BOT
+    application = Application.builder().token(BOT_TOKEN).build()
+
+    # Add a command handler for FAQs
+    application.add_handler(CommandHandler("faqs", show_faqs))
+
+    # Schedule daily tips at a specific time
+    job_queue = application.job_queue
+    timezone = pytz.timezone("America/Edmonton")  # Set your local timezone
+    target_time = datetime.time(hour=9, minute=0, tzinfo=timezone)  # Schedule for 9:00 AM
+    job_queue.run_daily(send_tips, time=target_time)
+
+    # Start the application
+    application.run_polling()
+
+if __name__ == "__main__":
+    main()

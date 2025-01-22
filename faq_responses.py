@@ -1,5 +1,6 @@
 from telegram import Update
 from telegram.ext import Application, MessageHandler, filters, ContextTypes
+import os
 
 # FAQ answers dictionary
 FAQ_ANSWERS = {
@@ -28,8 +29,11 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 # Main function to set up and run the bot
 def main():
-    # Replace with your bot token
-    BOT_TOKEN = "7745593859:AAGBbhDdDK_nKIDz7ZD_kdXwNzLxauhA4YQ"
+    # Fetch the bot token from environment variables
+    BOT_TOKEN = os.getenv("BOT_TOKEN")
+
+    if not BOT_TOKEN:
+        raise ValueError("BOT_TOKEN environment variable not set!")
 
     # Create the application
     application = Application.builder().token(BOT_TOKEN).build()

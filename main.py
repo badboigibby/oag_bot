@@ -9,8 +9,11 @@ import pytz
 app = Flask(__name__)
 
 # Load the bot token from environment variables
+from dotenv import load_dotenv
+load_dotenv()
+
 BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
-if not TELEGRAM_BOT_TOKEN:
+if not BOT_TOKEN:
     raise ValueError("Error: TELEGRAM_BOT_TOKEN environment variable is not set!")
 
 # List of chat IDs to send daily tips (replace with actual chat IDs)
@@ -59,13 +62,13 @@ async def send_tips(context: ContextTypes.DEFAULT_TYPE):
             print(f"Error sending message to chat ID {chat_id}: {e}")
 
 # Main function to initialize and run the bot
-def main():
+async def main():
     """
     Sets up the Telegram bot, schedules daily tasks, and starts polling for updates.
     """
     try:
         # Initialize the Telegram bot application
-        application = Application.builder().token(TELEGRAM_BOT_TOKEN).build()
+        application = Application.builder().token(BOT_TOKEN).build()
 
         # Add a command handler for FAQs
         application.add_handler(CommandHandler("faqs", show_faqs))
@@ -78,11 +81,13 @@ def main():
 
         # Start polling to process updates
         print("Bot is running... Press Ctrl+C to stop.")
-        application.run_polling()
+        await application.run_polling()
 
     except Exception as e:
         print(f"An error occurred: {e}")
 
 # Entry point of the script
 if __name__ == "__main__":
-    main()
+    import asyncio
+    asyncio.run(main())
+

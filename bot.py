@@ -8,7 +8,7 @@ import datetime
 
 # Fetch the bot token from environment variables
 TELEGRAM_BOT_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN")
-STORE_URL = "https://oag-store.onrender.com"
+STORE_URL = "https://oagstore.com"
 
 # Product list
 PRODUCTS = [

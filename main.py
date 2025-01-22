@@ -10,7 +10,7 @@ app = Flask(__name__)
 
 # Load the bot token from environment variables
 BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
-if not BOT_TOKEN:
+if not TELEGRAM_BOT_TOKEN:
     raise ValueError("Error: TELEGRAM_BOT_TOKEN environment variable is not set!")
 
 # List of chat IDs to send daily tips (replace with actual chat IDs)
@@ -65,7 +65,7 @@ def main():
     """
     try:
         # Initialize the Telegram bot application
-        application = Application.builder().token(BOT_TOKEN).build()
+        application = Application.builder().token(TELEGRAM_BOT_TOKEN).build()
 
         # Add a command handler for FAQs
         application.add_handler(CommandHandler("faqs", show_faqs))

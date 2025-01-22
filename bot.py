@@ -7,7 +7,7 @@ from telegram.ext import Application, CommandHandler, MessageHandler, filters, C
 import datetime
 
 # Fetch the bot token from Render's environment variables
-BOT_TOKEN = os.environ.get("BOT_TOKEN")
+BOT_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN")
 STORE_URL = "https://oag-store.onrender.com"
 
 # Product list

@@ -30,10 +30,10 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
 # Main function to set up and run the bot
 def main():
     # Fetch the bot token from environment variables
-    BOT_TOKEN = os.getenv("BOT_TOKEN")
+    BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
 
     if not BOT_TOKEN:
-        raise ValueError("BOT_TOKEN environment variable not set!")
+        raise ValueError("TELEGRAM_BOT_TOKEN environment variable not set!")
 
     # Create the application
     application = Application.builder().token(BOT_TOKEN).build()
